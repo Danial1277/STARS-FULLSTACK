@@ -3,80 +3,80 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="relative min-h-screen py-12 px-4 sm:px-6 max-w-4xl mx-auto text-white">
+    <div className="relative min-h-screen py-10 px-4 sm:px-6 max-w-4xl mx-auto text-slate-100">
       {/* Header */}
-      <div className="text-center mb-12">
-        <span className="text-xs font-semibold uppercase tracking-widest text-cyan-400">
-          О проекте
+      <div className="mb-8">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Сведения о разработке
         </span>
-        <h1 className="mt-2 text-3xl sm:text-5xl font-extrabold tracking-tight">
-          Сайт «Созвездия»
+        <h1 className="mt-1.5 text-2xl sm:text-4xl font-bold tracking-tight text-white">
+          О проекте «Созвездия»
         </h1>
-        <p className="mt-2 text-base text-zinc-400">
-          Интерактивная энциклопедия звёздного неба
+        <p className="mt-1.5 text-sm text-slate-300">
+          Интерактивный веб-сервис для изучения созвездий и навигационных звёзд
         </p>
       </div>
 
-      {/* Main Mission */}
-      <div className="rounded-3xl border border-indigo-900/40 bg-zinc-950/70 p-6 sm:p-8 backdrop-blur-xl shadow-2xl mb-8 space-y-4">
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <span className="text-cyan-400">✦</span> Концепция и цели
+      {/* Описание */}
+      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl mb-6 space-y-3">
+        <h2 className="text-base font-bold text-white">
+          Концепция и задачи проекта
         </h2>
-        <p className="text-sm leading-relaxed text-zinc-300">
-          Сайт задуман не как сухой справочник или статичные картинки, а как живое интерактивное пространство. При входе пользователь видит живую анимацию небесных созвездий, которые плавно двигаются и меняются.
+        <p className="text-xs sm:text-sm leading-relaxed text-slate-300">
+          Проект разработан как наглядный образовательный атлас ночного неба. Вместо статичных таблиц пользователю предоставляется динамическая проекция созвездий, интерактивная карта небосвода с возможностью масштабирования, справочный каталог и блок тестирования.
         </p>
-        <p className="text-sm leading-relaxed text-zinc-300">
-          Здесь можно исследовать интерактивную карту неба, рассчитывать созвездие по дате рождения, читать мифы и факты в энциклопедии, сохранять заметки в личном кабинете и проверять астрономическую интуицию в викторине.
+        <p className="text-xs sm:text-sm leading-relaxed text-slate-300">
+          Сервис включает в себя алгоритм вычисления видимых созвездий по календарной дате, модуль персональных заметок для полевых наблюдений и интерактивную викторину.
         </p>
       </div>
 
-      {/* Team */}
-      <div className="rounded-3xl border border-indigo-900/40 bg-zinc-950/70 p-6 sm:p-8 backdrop-blur-xl shadow-2xl mb-8">
-        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <span className="text-indigo-400">👥</span> Команда разработчиков
+      {/* Команда */}
+      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 backdrop-blur-xl mb-6">
+        <h2 className="text-base font-bold text-white mb-4">
+          Состав команды разработчиков
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Frontend Team */}
-          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-5">
-            <span className="rounded-md bg-cyan-950/80 border border-cyan-800/60 px-2 py-0.5 text-[11px] font-semibold text-cyan-300">
-              Frontend-разработчики (Next.js / React)
+          <div className="rounded-lg border border-slate-800 bg-slate-950/70 p-4">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
+              Frontend-разработка (Next.js / React)
             </span>
-            <h3 className="text-lg font-bold text-white mt-2">Наргиз и Сатыбалды</h3>
-            <ul className="mt-2 space-y-1.5 text-xs text-zinc-400">
-              <li>• Разработка интерфейса на Next.js и React 19</li>
-              <li>• Динамические анимации на SVG и HTML5 Canvas</li>
-              <li>• Интерактивная карта неба с зумом и перемещением</li>
-              <li>• Энциклопедия, личный кабинет и викторина</li>
+            <h3 className="text-base font-bold text-white mt-1">Наргиз и Сатыбалды</h3>
+            <ul className="mt-2 space-y-1 text-xs text-slate-300">
+              <li>• Архитектура клиентской части на Next.js 16 и React 19</li>
+              <li>• Проекция созвездий и координатные сетки (SVG / Canvas)</li>
+              <li>• Интерактивная карта небосвода</li>
+              <li>• Модули викторины, каталога и личного кабинета</li>
             </ul>
           </div>
 
           {/* Backend Team */}
-          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-5">
-            <span className="rounded-md bg-indigo-950/80 border border-indigo-800/60 px-2 py-0.5 text-[11px] font-semibold text-indigo-300">
-              Бэкенд-разработчики (Python / FastAPI)
+          <div className="rounded-lg border border-slate-800 bg-slate-950/70 p-4">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
+              Backend-разработка (Python / FastAPI)
             </span>
-            <h3 className="text-lg font-bold text-white mt-2">Даниал Н. и Даниал Т.</h3>
-            <ul className="mt-2 space-y-1.5 text-xs text-zinc-400">
-              <li>• Архитектура API и база данных PostgreSQL / SQLAlchemy</li>
-              <li>• Эндпоинты для созвездий, звёзд и расчёта по дате</li>
-              <li>• Авторизация, роли пользователей и личные кабинеты</li>
-              <li>• Логика подсчёта баллов викторины</li>
+            <h3 className="text-base font-bold text-white mt-1">Даниал Н. и Даниал Т.</h3>
+            <ul className="mt-2 space-y-1 text-xs text-slate-300">
+              <li>• Проектирование REST API на FastAPI</li>
+              <li>• Схема базы данных астрономических объектов (PostgreSQL)</li>
+              <li>• Аутентификация и хранение пользовательских данных</li>
+              <li>• Валидация входных данных и алгоритм расчёта по дате</li>
             </ul>
           </div>
         </div>
 
-        {/* Supervisor */}
-        <div className="mt-6 pt-6 border-t border-zinc-850 flex items-center justify-between">
+        {/* Руководитель */}
+        <div className="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div>
-            <span className="text-xs text-zinc-400">Преподаватель и руководитель проекта:</span>
-            <div className="text-base font-bold text-white">Дурбенов Р.М.</div>
+            <span className="text-slate-400">Преподаватель и научный руководитель: </span>
+            <strong className="text-white">Дурбенов Р.М.</strong>
           </div>
           <Link
             href="/"
-            className="rounded-xl bg-cyan-600 hover:bg-cyan-500 px-4 py-2 text-xs font-semibold text-white shadow-md transition-all"
+            className="text-slate-300 hover:text-white underline"
           >
-            На главную →
+            На главную страницу
           </Link>
         </div>
       </div>

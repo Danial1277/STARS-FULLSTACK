@@ -45,73 +45,75 @@ export function ConstellationHeroAnimation() {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-5xl rounded-3xl border border-slate-700/50 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-indigo-950/40 p-5 sm:p-8 backdrop-blur-2xl shadow-2xl shadow-indigo-950/30">
-      {/* Header of the Hero viewer */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+    <div className="relative mx-auto w-full max-w-5xl rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:p-7 backdrop-blur-xl shadow-xl">
+      {/* Header */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-300 border border-amber-400/30">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping" />
-              Живое созвездие сейчас
+            <span className="rounded-md bg-slate-800 px-2 py-0.5 text-[11px] font-medium text-slate-300">
+              {current.hemisphere} полушарие
             </span>
-            <span className="rounded-full bg-slate-800/80 px-2.5 py-1 text-[11px] text-slate-300 font-medium">
-              {current.hemisphere} небо
+            <span className="text-[11px] text-slate-400 font-mono">
+              IAU: {current.abbreviation}
             </span>
           </div>
 
-          <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold tracking-tight text-white">
             {current.name}
-            <span className="text-sm font-normal text-indigo-300">
+            <span className="ml-2 text-sm font-normal text-slate-400 font-mono">
               ({current.latinName})
             </span>
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-slate-300 max-w-lg leading-relaxed">
+          <p className="mt-1 text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
             {current.shortDescription}
           </p>
         </div>
 
-        {/* Animation controls */}
+        {/* Animation controls without emojis */}
         <div className="flex items-center gap-2">
           <button
             onClick={handlePrev}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/60 text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-slate-500 hover:text-white transition-colors"
             title="Предыдущее созвездие"
+            aria-label="Предыдущее"
           >
-            ←
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex h-10 items-center gap-1.5 rounded-2xl border border-slate-700/60 bg-slate-800/60 px-3.5 text-xs font-semibold text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
+            className="flex h-9 items-center rounded-lg border border-slate-700 bg-slate-800/80 px-3 text-xs font-medium text-slate-300 hover:border-slate-500 hover:text-white transition-colors"
           >
-            {isPlaying ? "❚❚ Пауза" : "▶ Смотреть"}
+            {isPlaying ? "Пауза" : "Автосмена"}
           </button>
           <button
             onClick={handleNext}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/60 text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:border-slate-500 hover:text-white transition-colors"
             title="Следующее созвездие"
+            aria-label="Следующее"
           >
-            →
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
           </button>
           <Link
             href={`/encyclopedia/constellation/${current.id}`}
-            className="flex h-10 items-center rounded-2xl bg-gradient-to-r from-sky-400 to-indigo-500 px-4 text-xs font-bold text-slate-950 shadow-md shadow-sky-500/20 hover:brightness-110 transition-all"
+            className="flex h-9 items-center rounded-lg bg-slate-100 hover:bg-white px-3.5 text-xs font-semibold text-slate-900 transition-colors"
           >
-            История и звёзды →
+            В энциклопедию
           </Link>
         </div>
       </div>
 
-      {/* Interactive SVG Canvas */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-inner">
-        {/* Soft cosmic glow in background */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.18),transparent_70%)]" />
-
+      {/* SVG Projection Canvas */}
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-slate-800/90 bg-[#080c16] shadow-inner">
         <svg
           viewBox="0 0 100 100"
           className="relative h-full w-full select-none"
           preserveAspectRatio="none"
         >
-          {/* Constellation connecting lines with draw animation */}
+          {/* Constellation connecting lines */}
           {current.lines.map(([startIndex, endIndex], lineIdx) => {
             const starA = current.stars[startIndex];
             const starB = current.stars[endIndex];
@@ -124,23 +126,22 @@ export function ConstellationHeroAnimation() {
                 y1={starA.y}
                 x2={starB.x}
                 y2={starB.y}
-                stroke="#7dd3fc"
-                strokeWidth="0.55"
+                stroke="#64748b"
+                strokeWidth="0.5"
                 strokeOpacity={0.8 * animatedProgress}
                 strokeDasharray="100"
                 strokeDashoffset={100 * (1 - animatedProgress)}
                 style={{
-                  filter: "drop-shadow(0 0 4px rgba(125, 211, 252, 0.6))",
-                  transition: "stroke-dashoffset 0.7s ease-out",
+                  transition: "stroke-dashoffset 0.6s ease-out",
                 }}
               />
             );
           })}
 
-          {/* Constellation Stars */}
+          {/* Stars */}
           {current.stars.map((star, idx) => {
             const isHovered = hoveredStar === star.name;
-            const radius = Math.max(1.1, 2.4 - (star.brightness * 0.25));
+            const radius = Math.max(0.9, 2.2 - (star.brightness * 0.22));
 
             return (
               <g
@@ -149,34 +150,31 @@ export function ConstellationHeroAnimation() {
                 onMouseEnter={() => setHoveredStar(star.name)}
                 onMouseLeave={() => setHoveredStar(null)}
               >
-                {/* Outer halo */}
+                {/* Subtle halo */}
                 <circle
                   cx={star.x}
                   cy={star.y}
-                  r={radius * (isHovered ? 2.6 : 1.9)}
+                  r={radius * (isHovered ? 2.4 : 1.7)}
                   fill={star.color}
-                  opacity={isHovered ? 0.5 : 0.22}
-                  style={{ transition: "all 0.3s ease" }}
+                  opacity={isHovered ? 0.35 : 0.15}
+                  style={{ transition: "all 0.2s ease" }}
                 />
 
-                {/* Core star */}
+                {/* Star center */}
                 <circle
                   cx={star.x}
                   cy={star.y}
                   r={radius}
                   fill={star.color}
-                  style={{
-                    filter: `drop-shadow(0 0 ${radius * 2}px ${star.color})`,
-                  }}
                 />
 
                 {/* Star label */}
                 <text
                   x={star.x}
                   y={star.y - (radius + 2)}
-                  fill={isHovered ? "#38bdf8" : "#cbd5e1"}
-                  fontSize="2.4"
-                  fontWeight="600"
+                  fill={isHovered ? "#93c5fd" : "#94a3b8"}
+                  fontSize="2.2"
+                  fontWeight="500"
                   textAnchor="middle"
                   className="pointer-events-none select-none transition-colors"
                 >
@@ -187,32 +185,31 @@ export function ConstellationHeroAnimation() {
           })}
         </svg>
 
-        {/* Floating tooltip on hover */}
+        {/* Hover info tooltip */}
         {hoveredStar && (
-          <div className="absolute bottom-4 left-4 rounded-xl border border-sky-400/40 bg-slate-900/90 px-3.5 py-2 text-xs text-white shadow-xl backdrop-blur-md">
-            <span className="font-bold text-sky-300">✦ {hoveredStar}</span>
-            <span className="block text-[10px] text-slate-300 mt-0.5">Кликните, чтобы изучить подробнее</span>
+          <div className="absolute bottom-3 left-3 rounded-lg border border-slate-700 bg-slate-900/95 px-3 py-1.5 text-xs text-slate-200 shadow-md">
+            <span className="font-semibold text-white">{hoveredStar}</span>
           </div>
         )}
 
-        {/* Season & Hemisphere badge */}
-        <div className="absolute top-3.5 right-3.5 flex items-center gap-2">
-          <span className="rounded-xl bg-slate-900/80 border border-slate-700/60 px-3 py-1 text-xs text-slate-200 backdrop-blur-md shadow-sm">
-            🔭 Сезон: <strong className="text-amber-300">{current.season}</strong>
+        {/* Season indicator */}
+        <div className="absolute top-3 right-3">
+          <span className="rounded-md bg-slate-900/90 border border-slate-800 px-2.5 py-1 text-[11px] text-slate-300">
+            Наблюдение: {current.season}
           </span>
         </div>
       </div>
 
-      {/* Thumbnails to switch directly */}
-      <div className="mt-5 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+      {/* Direct Selection Pills */}
+      <div className="mt-4 flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
         {CONSTELLATIONS.map((c, i) => (
           <button
             key={c.id}
             onClick={() => setCurrentIndex(i)}
-            className={`flex-shrink-0 rounded-2xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
+            className={`flex-shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               i === currentIndex
-                ? "border border-amber-400/70 bg-gradient-to-r from-amber-400/20 to-sky-400/20 text-white shadow-sm"
-                : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                ? "bg-slate-700 text-white"
+                : "bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
             }`}
           >
             {c.name}

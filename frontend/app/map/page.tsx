@@ -70,44 +70,41 @@ export default function SkyMapPage() {
   });
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden bg-[#090d16] text-slate-100">
+    <div className="relative flex flex-1 flex-col overflow-hidden bg-[#06080e] text-slate-100">
       {/* Top Map Control Toolbar */}
-      <div className="z-20 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 bg-slate-950/80 px-4 py-3 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
-          <span className="text-xl">🗺️</span>
-          <div>
-            <h1 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              Интерактивная карта звёздного неба
-            </h1>
-            <p className="text-[11px] text-slate-400">
-              Перемещайте карту мышью, приближайте колёсиком, кликайте на звёзды
-            </p>
-          </div>
+      <div className="z-20 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-[#080c16]/90 px-4 py-2.5 backdrop-blur-md">
+        <div>
+          <h1 className="text-sm sm:text-base font-bold text-white">
+            Интерактивная карта звёздного неба
+          </h1>
+          <p className="text-[11px] text-slate-400">
+            Перемещение мышью, масштабирование колесиком, выбор звёздных объектов кликом
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Hemisphere Filter */}
-          <div className="flex rounded-2xl border border-slate-700/60 bg-slate-900/80 p-1">
+          <div className="flex rounded-lg border border-slate-800 bg-slate-900 p-0.5">
             <button
               onClick={() => setHemisphereFilter("all")}
-              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
-                hemisphereFilter === "all" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
+              className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                hemisphereFilter === "all" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"
               }`}
             >
               Всё небо
             </button>
             <button
               onClick={() => setHemisphereFilter("north")}
-              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
-                hemisphereFilter === "north" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
+              className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                hemisphereFilter === "north" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"
               }`}
             >
               Северное
             </button>
             <button
               onClick={() => setHemisphereFilter("south")}
-              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
-                hemisphereFilter === "south" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
+              className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                hemisphereFilter === "south" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"
               }`}
             >
               Южное
@@ -117,9 +114,9 @@ export default function SkyMapPage() {
           {/* Toggles */}
           <button
             onClick={() => setShowLines(!showLines)}
-            className={`rounded-2xl border px-3 py-1.5 font-semibold transition-colors ${
+            className={`rounded-lg border px-3 py-1 font-medium transition-colors ${
               showLines
-                ? "border-sky-400/50 bg-sky-950/50 text-sky-200"
+                ? "border-slate-600 bg-slate-800 text-slate-200"
                 : "border-slate-800 bg-slate-900 text-slate-400"
             }`}
           >
@@ -127,37 +124,37 @@ export default function SkyMapPage() {
           </button>
           <button
             onClick={() => setShowLabels(!showLabels)}
-            className={`rounded-2xl border px-3 py-1.5 font-semibold transition-colors ${
+            className={`rounded-lg border px-3 py-1 font-medium transition-colors ${
               showLabels
-                ? "border-sky-400/50 bg-sky-950/50 text-sky-200"
+                ? "border-slate-600 bg-slate-800 text-slate-200"
                 : "border-slate-800 bg-slate-900 text-slate-400"
             }`}
           >
             Подписи: {showLabels ? "Вкл" : "Выкл"}
           </button>
 
-          {/* Zoom buttons */}
-          <div className="flex items-center gap-1 rounded-2xl border border-slate-800 bg-slate-900/80 px-2 py-1">
+          {/* Zoom controls */}
+          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 px-2 py-0.5">
             <button
               onClick={() => setZoom((z) => Math.min(z * 1.2, 3.5))}
-              className="px-2 font-bold hover:text-sky-400 text-sm"
+              className="px-1.5 font-bold hover:text-white"
               title="Приблизить"
             >
               +
             </button>
-            <span className="text-[11px] text-slate-300 w-10 text-center font-semibold">
+            <span className="text-[11px] text-slate-300 w-10 text-center font-mono">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.max(z * 0.8, 0.6))}
-              className="px-2 font-bold hover:text-sky-400 text-sm"
+              className="px-1.5 font-bold hover:text-white"
               title="Отдалить"
             >
               −
             </button>
             <button
               onClick={resetView}
-              className="ml-1 text-[11px] font-semibold text-amber-300 hover:underline px-1"
+              className="ml-1 text-[11px] text-slate-400 hover:text-white hover:underline px-1"
             >
               Сброс
             </button>
@@ -167,7 +164,7 @@ export default function SkyMapPage() {
 
       {/* Main Interactive Map Viewport */}
       <div
-        className="relative flex-1 cursor-grab active:cursor-grabbing overflow-hidden select-none bg-[radial-gradient(circle_at_50%_50%,#0f172a_0%,#090d16_100%)]"
+        className="relative flex-1 cursor-grab active:cursor-grabbing overflow-hidden select-none bg-[#06080e]"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -185,18 +182,18 @@ export default function SkyMapPage() {
             className="w-[1000px] h-[650px] mx-auto overflow-visible"
           >
             {/* Celestial Grids */}
-            <circle cx="500" cy="325" r="300" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <circle cx="500" cy="325" r="200" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <circle cx="500" cy="325" r="100" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <line x1="500" y1="20" x2="500" y2="630" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
-            <line x1="100" y1="325" x2="900" y2="325" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+            <circle cx="500" cy="325" r="300" fill="none" stroke="#172033" strokeWidth="0.8" strokeDasharray="3 4" />
+            <circle cx="500" cy="325" r="200" fill="none" stroke="#172033" strokeWidth="0.8" strokeDasharray="3 4" />
+            <circle cx="500" cy="325" r="100" fill="none" stroke="#172033" strokeWidth="0.8" strokeDasharray="3 4" />
+            <line x1="500" y1="20" x2="500" y2="630" stroke="#172033" strokeWidth="0.8" strokeDasharray="4 4" />
+            <line x1="100" y1="325" x2="900" y2="325" stroke="#172033" strokeWidth="0.8" strokeDasharray="4 4" />
 
-            {/* Soft Milky Way */}
+            {/* Milky Way subtle contour */}
             <path
               d="M100 100 Q 400 300, 800 550"
               fill="none"
-              stroke="rgba(125, 211, 252, 0.05)"
-              strokeWidth="110"
+              stroke="rgba(255, 255, 255, 0.03)"
+              strokeWidth="90"
               strokeLinecap="round"
             />
 
@@ -223,9 +220,9 @@ export default function SkyMapPage() {
                           y1={(sA.y - 50) * pos.scale}
                           x2={(sB.x - 50) * pos.scale}
                           y2={(sB.y - 50) * pos.scale}
-                          stroke={isSelected ? "#38bdf8" : "#64748b"}
-                          strokeWidth={isSelected ? 1.4 : 0.8}
-                          strokeOpacity={isSelected ? 0.95 : 0.45}
+                          stroke={isSelected ? "#93c5fd" : "#475569"}
+                          strokeWidth={isSelected ? 1.2 : 0.7}
+                          strokeOpacity={isSelected ? 0.95 : 0.5}
                         />
                       );
                     })}
@@ -236,9 +233,9 @@ export default function SkyMapPage() {
                       x="0"
                       y="-45"
                       textAnchor="middle"
-                      fill={isSelected ? "#7dd3fc" : "#94a3b8"}
-                      fontSize="9"
-                      fontWeight="bold"
+                      fill={isSelected ? "#cbd5e1" : "#64748b"}
+                      fontSize="8.5"
+                      fontWeight="500"
                       className="cursor-pointer hover:underline"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -254,7 +251,7 @@ export default function SkyMapPage() {
                   {constellation.stars.map((star, sIdx) => {
                     const sx = (star.x - 50) * pos.scale;
                     const sy = (star.y - 50) * pos.scale;
-                    const r = Math.max(2.0, 4.0 - star.brightness * 0.4);
+                    const r = Math.max(1.8, 3.8 - star.brightness * 0.4);
 
                     return (
                       <g
@@ -270,10 +267,10 @@ export default function SkyMapPage() {
                         <circle
                           cx={sx}
                           cy={sy}
-                          r={r * 2.2}
+                          r={r * 2.0}
                           fill={star.color}
-                          opacity="0.25"
-                          className="group-hover:opacity-60 transition-opacity"
+                          opacity="0.2"
+                          className="group-hover:opacity-50 transition-opacity"
                         />
                         {/* Star core */}
                         <circle
@@ -281,9 +278,6 @@ export default function SkyMapPage() {
                           cy={sy}
                           r={r}
                           fill={star.color}
-                          style={{
-                            filter: `drop-shadow(0 0 ${r * 1.5}px ${star.color})`,
-                          }}
                         />
                         {/* Hover star label */}
                         <text
@@ -294,7 +288,7 @@ export default function SkyMapPage() {
                           textAnchor="middle"
                           fill="#f8fafc"
                           fontSize="6.5"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none font-semibold"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none font-medium"
                         >
                           {star.name.split(" ")[0]}
                         </text>
@@ -309,16 +303,16 @@ export default function SkyMapPage() {
 
         {/* Selected Object Info Sidebar / Panel */}
         {selectedConstellation && (
-          <div className="absolute right-4 top-4 z-30 w-84 max-w-[calc(100vw-2rem)] rounded-3xl border border-sky-400/40 bg-slate-900/90 p-5 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-right duration-200">
+          <div className="absolute right-4 top-4 z-30 w-80 max-w-[calc(100vw-2rem)] rounded-xl border border-slate-700 bg-slate-900/95 p-5 shadow-xl backdrop-blur-xl animate-in fade-in slide-in-from-right duration-150">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
-                  {selectedStar ? "⭐ Звезда" : "✨ Созвездие"}
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  {selectedStar ? "Звезда" : "Созвездие"}
                 </span>
-                <h3 className="text-xl font-bold text-white mt-0.5">
+                <h3 className="text-lg font-bold text-white mt-0.5">
                   {selectedStar ? selectedStar.star.name : selectedConstellation.name}
                 </h3>
-                <p className="text-xs text-indigo-300 font-mono">
+                <p className="text-xs text-slate-400 font-mono">
                   {selectedConstellation.latinName} ({selectedConstellation.abbreviation})
                 </p>
               </div>
@@ -327,38 +321,39 @@ export default function SkyMapPage() {
                   setSelectedConstellation(null);
                   setSelectedStar(null);
                 }}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-white text-sm p-1"
+                aria-label="Закрыть"
               >
                 ✕
               </button>
             </div>
 
             {selectedStar ? (
-              <div className="mt-4 space-y-2.5 text-xs">
-                <div className="rounded-2xl bg-slate-800/60 p-3 border border-slate-700/50">
+              <div className="mt-4 space-y-2 text-xs">
+                <div className="rounded-lg bg-slate-800/70 p-2.5 border border-slate-700/60">
                   <span className="text-slate-400">Тип: </span>
-                  <span className="font-semibold text-white">{selectedStar.star.type}</span>
+                  <span className="font-medium text-white">{selectedStar.star.type}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-2xl bg-slate-800/60 p-2.5 border border-slate-700/50">
+                  <div className="rounded-lg bg-slate-800/70 p-2 border border-slate-700/60">
                     <span className="text-slate-400 block text-[10px]">Блеск</span>
-                    <span className="font-bold text-amber-300">{selectedStar.star.brightness} mag</span>
+                    <span className="font-semibold text-white">{selectedStar.star.brightness} mag</span>
                   </div>
-                  <div className="rounded-2xl bg-slate-800/60 p-2.5 border border-slate-700/50">
+                  <div className="rounded-lg bg-slate-800/70 p-2 border border-slate-700/60">
                     <span className="text-slate-400 block text-[10px]">Созвездие</span>
-                    <span className="font-bold text-white">{selectedConstellation.name}</span>
+                    <span className="font-semibold text-white">{selectedConstellation.name}</span>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="mt-4 space-y-3 text-xs">
-                <p className="text-slate-200 leading-relaxed">
+                <p className="text-slate-300 leading-relaxed">
                   {selectedConstellation.shortDescription}
                 </p>
 
-                <div className="rounded-2xl bg-slate-800/60 p-3.5 border border-slate-700/50">
-                  <h4 className="text-[11px] font-bold text-amber-300 mb-1">
-                    Мифология и легенда:
+                <div className="rounded-lg bg-slate-800/70 p-3 border border-slate-700/60">
+                  <h4 className="text-[11px] font-semibold text-slate-300 mb-1">
+                    История и мифология:
                   </h4>
                   <p className="text-[11px] text-slate-300 line-clamp-3 leading-relaxed">
                     {selectedConstellation.mythology}
@@ -371,20 +366,20 @@ export default function SkyMapPage() {
             <div className="mt-5 flex items-center gap-2 pt-3 border-t border-slate-800">
               <button
                 onClick={() => toggleFavorite(selectedConstellation.id)}
-                className={`flex-1 rounded-2xl border py-2.5 text-xs font-bold transition-all ${
+                className={`flex-1 rounded-lg border py-2 text-xs font-medium transition-colors ${
                   isFavorite(selectedConstellation.id)
-                    ? "border-amber-400 bg-amber-400/20 text-amber-200"
-                    : "border-slate-700 bg-slate-800 text-slate-200 hover:text-white"
+                    ? "border-slate-500 bg-slate-800 text-white"
+                    : "border-slate-700 bg-slate-850 text-slate-300 hover:text-white"
                 }`}
               >
-                {isFavorite(selectedConstellation.id) ? "★ В избранном" : "☆ В избранное"}
+                {isFavorite(selectedConstellation.id) ? "В избранном" : "В избранное"}
               </button>
 
               <Link
                 href={`/encyclopedia/constellation/${selectedConstellation.id}`}
-                className="flex-1 rounded-2xl bg-gradient-to-r from-sky-400 to-indigo-500 py-2.5 text-center text-xs font-bold text-slate-950 shadow-md transition-all hover:brightness-110"
+                className="flex-1 rounded-lg bg-slate-100 hover:bg-white py-2 text-center text-xs font-semibold text-slate-900 transition-colors"
               >
-                Подробнее →
+                В энциклопедию
               </Link>
             </div>
           </div>

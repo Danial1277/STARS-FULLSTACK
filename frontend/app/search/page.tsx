@@ -33,7 +33,6 @@ export default function SearchPage() {
     return { constellations: matchedConstellations, stars: matchedStars };
   }, [query]);
 
-  // Quick prompt suggestions
   const suggestions = [
     "Орион",
     "Большая Медведица",
@@ -46,30 +45,30 @@ export default function SearchPage() {
   ];
 
   return (
-    <div className="relative min-h-screen py-12 px-4 sm:px-6 max-w-5xl mx-auto text-white">
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <span className="text-xs font-semibold uppercase tracking-widest text-cyan-400">
+    <div className="relative min-h-screen py-10 px-4 sm:px-6 max-w-5xl mx-auto text-slate-100">
+      <div className="max-w-2xl mx-auto text-center mb-8">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
           Поиск по каталогу
         </span>
-        <h1 className="mt-2 text-3xl sm:text-5xl font-extrabold tracking-tight">
-          Поиск звёзд и созвездий
+        <h1 className="mt-1.5 text-2xl sm:text-4xl font-bold tracking-tight text-white">
+          Поиск созвездий и звёзд
         </h1>
-        <p className="mt-3 text-sm text-zinc-400">
-          Введите название созвездия, звезды, знак зодиака или астрономический термин
+        <p className="mt-2 text-xs sm:text-sm text-slate-300">
+          Поиск по русскому или латинскому названию, обозначению Байера или описанию
         </p>
 
         {/* Search Input */}
-        <div className="mt-8 relative max-w-xl mx-auto">
+        <div className="mt-6 relative max-w-lg mx-auto">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Начните вводить (например: Орион, Сириус, Кассиопея)..."
-            className="w-full rounded-2xl border border-indigo-700/60 bg-zinc-950/90 px-5 py-4 pl-12 text-base text-white shadow-2xl backdrop-blur-md focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+            placeholder="Введите название (например: Орион, Сириус)..."
+            className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-3 pl-11 text-sm text-white focus:border-slate-500 focus:outline-none"
             autoFocus
           />
           <svg
-            className="absolute left-4 top-4.5 h-5 w-5 text-zinc-400"
+            className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -80,21 +79,21 @@ export default function SearchPage() {
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-4 top-4 text-xs font-bold text-zinc-400 hover:text-white"
+              className="absolute right-3.5 top-3.5 text-xs text-slate-400 hover:text-white"
             >
-              ✕ Очистить
+              Очистить
             </button>
           )}
         </div>
 
         {/* Suggestion pills */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-          <span className="text-xs text-zinc-500">Популярные запросы:</span>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
+          <span className="text-xs text-slate-400">Примеры запросов:</span>
           {suggestions.map((s) => (
             <button
               key={s}
               onClick={() => setQuery(s)}
-              className="rounded-lg bg-zinc-900 border border-zinc-800 px-2.5 py-1 text-xs text-zinc-300 hover:border-cyan-500/60 hover:text-cyan-300 transition-colors"
+              className="rounded-md bg-slate-800 border border-slate-700 px-2.5 py-1 text-xs text-slate-300 hover:border-slate-500 hover:text-white transition-colors"
             >
               {s}
             </button>
@@ -104,37 +103,37 @@ export default function SearchPage() {
 
       {/* Results output */}
       {query.trim() && (
-        <div className="space-y-8 animate-in fade-in duration-200">
+        <div className="space-y-6">
           {searchResults.constellations.length === 0 && searchResults.stars.length === 0 && (
-            <div className="text-center py-12 rounded-3xl border border-dashed border-zinc-800 bg-zinc-950/40">
-              <p className="text-base text-zinc-400">По запросу «{query}» ничего не найдено.</p>
-              <p className="text-xs text-zinc-500 mt-1">Попробуйте изменить запрос или выбрать одну из подсказок выше.</p>
+            <div className="text-center py-10 rounded-xl border border-dashed border-slate-800 bg-slate-900/30">
+              <p className="text-sm text-slate-400">По запросу «{query}» совпадений не обнаружено.</p>
+              <p className="text-xs text-slate-500 mt-1">Проверьте правильность написания или воспользуйтесь подсказками выше.</p>
             </div>
           )}
 
           {/* Constellations */}
           {searchResults.constellations.length > 0 && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-cyan-400">✦</span> Созвездия ({searchResults.constellations.length})
+              <h2 className="text-base font-bold text-white mb-3">
+                Созвездия ({searchResults.constellations.length})
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {searchResults.constellations.map((c) => (
                   <Link
                     key={c.id}
                     href={`/encyclopedia/constellation/${c.id}`}
-                    className="flex items-center justify-between rounded-2xl border border-indigo-900/40 bg-zinc-950/70 p-4 transition-all hover:border-cyan-400 hover:bg-zinc-900"
+                    className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition-colors hover:border-slate-700 hover:bg-slate-850"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-white text-base">{c.name}</span>
-                        <span className="text-xs text-indigo-300 font-mono">({c.latinName})</span>
+                        <span className="font-semibold text-white text-sm">{c.name}</span>
+                        <span className="text-xs text-slate-400 font-mono">({c.latinName})</span>
                       </div>
-                      <p className="text-xs text-zinc-400 line-clamp-1 mt-1">
+                      <p className="text-xs text-slate-400 line-clamp-1 mt-1">
                         {c.shortDescription}
                       </p>
                     </div>
-                    <span className="text-cyan-400 text-xs font-semibold ml-4">
+                    <span className="text-slate-300 text-xs font-medium ml-4">
                       Открыть →
                     </span>
                   </Link>
@@ -146,35 +145,32 @@ export default function SearchPage() {
           {/* Stars */}
           {searchResults.stars.length > 0 && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-amber-400">★</span> Звёзды ({searchResults.stars.length})
+              <h2 className="text-base font-bold text-white mb-3">
+                Звёзды ({searchResults.stars.length})
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {searchResults.stars.map((s) => (
                   <Link
                     key={s.id}
                     href={`/encyclopedia/star/${s.id}`}
-                    className="flex items-center justify-between rounded-2xl border border-indigo-900/40 bg-zinc-950/70 p-4 transition-all hover:border-amber-400 hover:bg-zinc-900"
+                    className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition-colors hover:border-slate-700 hover:bg-slate-850"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5">
                       <div
-                        className="h-4 w-4 rounded-full flex-shrink-0"
-                        style={{
-                          backgroundColor: s.color,
-                          boxShadow: `0 0 10px ${s.color}`,
-                        }}
+                        className="h-2.5 w-2.5 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: s.color }}
                       />
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white text-base">{s.name}</span>
-                          <span className="text-xs text-zinc-400 font-mono">({s.latinName})</span>
+                          <span className="font-semibold text-white text-sm">{s.name}</span>
+                          <span className="text-xs text-slate-400 font-mono">({s.latinName})</span>
                         </div>
-                        <p className="text-xs text-zinc-400 line-clamp-1">
+                        <p className="text-xs text-slate-400 line-clamp-1">
                           Созвездие: {s.constellationName} • Блеск: {s.magnitude} mag
                         </p>
                       </div>
                     </div>
-                    <span className="text-amber-400 text-xs font-semibold ml-4">
+                    <span className="text-slate-300 text-xs font-medium ml-4">
                       Открыть →
                     </span>
                   </Link>

@@ -24,51 +24,47 @@ export function DateConstellationFinder() {
   };
 
   return (
-    <div className="rounded-3xl border border-slate-700/50 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-indigo-950/40 p-6 sm:p-8 backdrop-blur-xl shadow-xl">
-      <div className="flex items-center gap-2 text-amber-300">
-        <span className="text-lg">🎂</span>
-        <span className="text-xs font-bold tracking-wider uppercase">
-          Звёздный календарь
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 sm:p-7 backdrop-blur-xl">
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">
+          Календарный расчёт
         </span>
       </div>
 
-      <h3 className="mt-2 text-xl sm:text-2xl font-extrabold text-white">
-        Узнай своё созвездие по дате рождения
+      <h3 className="mt-1.5 text-xl font-bold text-white">
+        Определение созвездия по дате
       </h3>
-      <p className="mt-1 text-xs sm:text-sm text-slate-300 leading-relaxed">
-        Выберите дату своего рождения или любого значимого дня — и мы покажем, под каким созвездием сияло небо:
+      <p className="mt-1 text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+        Укажите календарную дату (например, день рождения), чтобы определить созвездие, связанное с этим периодом года.
       </p>
 
-      {/* Date Input with friendly styling */}
-      <div className="mt-5 flex flex-wrap items-center gap-4">
-        <div className="relative">
-          <input
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="rounded-2xl border border-slate-700/80 bg-slate-950/90 px-4 py-3 text-sm font-semibold text-white shadow-inner focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/20"
-          />
-        </div>
-        <div className="text-xs text-slate-400 flex items-center gap-1.5">
-          <span>✨</span>
-          <span>Попробуйте день рождения, юбилей или день космонавтики!</span>
-        </div>
+      {/* Date Input */}
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          className="rounded-lg border border-slate-700 bg-slate-950 px-3.5 py-2 text-sm text-white focus:border-slate-500 focus:outline-none"
+        />
+        <span className="text-xs text-slate-400">
+          Календарный день и месяц
+        </span>
       </div>
 
       {/* Matched Constellation Preview Card */}
       {matched && (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-950/20 via-slate-900/60 to-indigo-950/30 p-5 sm:p-6 backdrop-blur-md">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="mt-5 overflow-hidden rounded-xl border border-slate-800 bg-slate-950/70 p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="rounded-xl bg-amber-400/20 border border-amber-400/40 px-2.5 py-0.5 text-xs font-bold text-amber-200">
-                  {matched.zodiac ? `Знак: ${matched.zodiac}` : matched.season}
+              <div className="flex items-center gap-2">
+                <span className="rounded bg-slate-800 px-2 py-0.5 text-[11px] font-medium text-slate-300">
+                  {matched.zodiac ? `Зодиакальный сектор: ${matched.zodiac}` : matched.season}
                 </span>
                 <span className="text-xs text-slate-400 font-mono">
-                  {matched.latinName} ({matched.abbreviation})
+                  {matched.latinName}
                 </span>
               </div>
-              <h4 className="mt-2 text-2xl font-black text-white">
+              <h4 className="mt-1.5 text-xl font-bold text-white">
                 {matched.name}
               </h4>
               <p className="mt-1 max-w-xl text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -78,10 +74,9 @@ export function DateConstellationFinder() {
 
             <Link
               href={`/encyclopedia/constellation/${matched.id}`}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-sky-400 to-indigo-500 px-6 py-3 text-xs font-bold text-slate-950 shadow-md shadow-amber-400/20 hover:brightness-110 transition-all flex-shrink-0"
+              className="inline-flex items-center justify-center rounded-lg bg-slate-100 hover:bg-white px-4 py-2 text-xs font-semibold text-slate-900 transition-colors flex-shrink-0"
             >
-              Изучить моё созвездие
-              <span>→</span>
+              Перейти к описанию →
             </Link>
           </div>
         </div>

@@ -6,9 +6,9 @@ import { Starfield } from "@/components/Starfield";
 import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
-  title: "Созвездия — Интерактивная энциклопедия звёздного неба",
+  title: "Созвездия — Интерактивный астрономический атлас",
   description:
-    "Интерактивный сайт для изучения звёзд и созвездий: живая анимация неба, интерактивная карта, космическая викторина и энциклопедия.",
+    "Атлас созвездий и ярких звёзд: интерактивная карта небосвода, каталог объектов, мифология и проверка астрономических знаний.",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" className="h-full antialiased dark">
-      <body className="min-h-full flex flex-col bg-black text-white font-sans selection:bg-cyan-500 selection:text-black">
+      <body className="min-h-full flex flex-col bg-[#06080e] space-background text-slate-100 font-sans selection:bg-slate-700 selection:text-white">
         <UserProvider>
           <Starfield />
           <Navbar />

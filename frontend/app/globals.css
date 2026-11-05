@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d16;
+  --background: #06080e;
   --foreground: #e2e8f0;
 }
 
@@ -12,56 +12,34 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* Soft ambient atmospheric glow */
-.ambient-nebula {
-  background: 
-    radial-gradient(circle at 20% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 80% 30%, rgba(168, 85, 247, 0.10) 0%, transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(45, 212, 191, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 10% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 40%);
+/* Starfield atmospheric background */
+.space-background {
+  background: radial-gradient(circle at 50% 20%, #0d121f 0%, #06080e 75%);
 }
 
-/* Soft custom scrollbar for comfortable viewing */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #06080e;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 9999px;
-  border: 2px solid #090d16;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: #334155;
 }
 
-/* Gentle float animation */
-@keyframes soft-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
-}
-
-.animate-soft-float {
-  animation: soft-float 5s ease-in-out infinite;
-}
-
-/* Card hover glow */
-.glass-card {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(125, 211, 252, 0.35);
-  box-shadow: 0 12px 30px -10px rgba(14, 165, 233, 0.18);
-  transform: translateY(-2px);
+/* Clean panel styling */
+.space-panel {
+  background: rgba(13, 18, 31, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.4);
 }

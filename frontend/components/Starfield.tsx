@@ -19,98 +19,97 @@ export function Starfield() {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      initStars();
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Warm, soft cosmic palette for stars
-    const starColors = [
-      "rgba(255, 255, 255, ",
-      "rgba(254, 240, 138, ", // warm soft yellow
-      "rgba(224, 231, 255, ", // soft lavender
-      "rgba(186, 230, 253, ", // soft sky blue
-      "rgba(254, 215, 170, ", // soft peach
+    // Realistic stellar spectral colors based on Morgan-Keenan classification
+    // Class O/B (blue-white), A (pure white), F (yellow-white), G (yellow), K (orange), M (reddish)
+    const spectralColors = [
+      { r: 202, g: 220, b: 255 }, // B - Blue-white
+      { r: 240, g: 244, b: 255 }, // A - White
+      { r: 255, g: 250, b: 235 }, // F - Warm white
+      { r: 255, g: 232, b: 180 }, // G - Yellowish
+      { r: 255, g: 204, b: 153 }, // K - Orange
+      { r: 255, g: 170, b: 150 }, // M - Reddish
     ];
 
-    // Less dense, smoother stars (gentle on eyes)
-    const starCount = Math.floor((width * height) / 6000);
-    const stars = Array.from({ length: starCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 1.5 + 0.4,
-      alpha: Math.random() * 0.4 + 0.15,
-      speed: Math.random() * 0.008 + 0.003, // much slower twinkling
-      direction: Math.random() > 0.5 ? 1 : -1,
-      colorPrefix: starColors[Math.floor(Math.random() * starColors.length)],
-    }));
-
-    // Occasional gentle shooting star
-    interface ShootingStar {
+    interface Star {
       x: number;
       y: number;
-      length: number;
-      speed: number;
-      angle: number;
-      alpha: number;
+      radius: number;
+      baseAlpha: number;
+      currentAlpha: number;
+      twinkleSpeed: number;
+      phase: number;
+      color: { r: number; g: number; b: number };
     }
-    const shootingStars: ShootingStar[] = [];
 
-    const spawnShootingStar = () => {
-      if (shootingStars.length < 1 && Math.random() < 0.006) {
-        shootingStars.push({
-          x: Math.random() * (width * 0.8),
-          y: Math.random() * (height * 0.4),
-          length: Math.random() * 60 + 35,
-          speed: Math.random() * 4 + 3,
-          angle: (Math.PI / 4) + (Math.random() * 0.15 - 0.07),
-          alpha: 0.65,
-        });
-      }
-    };
+    let stars: Star[] = [];
 
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
+    const initStars = () => {
+      // Density of stars in night sky
+      const count = Math.floor((width * height) / 2800);
+      stars = Array.from({ length: count }, () => {
+        // Apparent magnitude distribution: many dim stars, very few bright ones
+        const rand = Math.random();
+        let radius = 0.5;
+        let baseAlpha = 0.25;
 
-      // Draw soft ambient stars
-      stars.forEach((star) => {
-        star.alpha += star.speed * star.direction;
-        if (star.alpha >= 0.75) {
-          star.alpha = 0.75;
-          star.direction = -1;
-        } else if (star.alpha <= 0.12) {
-          star.alpha = 0.12;
-          star.direction = 1;
+        if (rand > 0.98) {
+          radius = 1.6;
+          baseAlpha = 0.85;
+        } else if (rand > 0.90) {
+          radius = 1.1;
+          baseAlpha = 0.65;
+        } else if (rand > 0.65) {
+          radius = 0.8;
+          baseAlpha = 0.45;
+        } else {
+          radius = 0.45;
+          baseAlpha = 0.22;
         }
 
-        ctx.fillStyle = `${star.colorPrefix}${star.alpha})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
+        const color = spectralColors[Math.floor(Math.random() * spectralColors.length)];
+
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius,
+          baseAlpha,
+          currentAlpha: baseAlpha,
+          twinkleSpeed: 0.005 + Math.random() * 0.012,
+          phase: Math.random() * Math.PI * 2,
+          color,
+        };
       });
+    };
 
-      // Spawn and draw gentle shooting stars
-      spawnShootingStar();
-      for (let i = shootingStars.length - 1; i >= 0; i--) {
-        const s = shootingStars[i];
-        ctx.save();
-        ctx.strokeStyle = `rgba(186, 230, 253, ${s.alpha})`;
-        ctx.lineWidth = 1.2;
-        ctx.lineCap = "round";
+    initStars();
+
+    let time = 0;
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+      time += 1;
+
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
+        // Smooth sinusoidal twinkle like real atmospheric seeing
+        const flicker = Math.sin(time * star.twinkleSpeed + star.phase);
+        star.currentAlpha = Math.max(0.08, star.baseAlpha + flicker * 0.18);
+
+        ctx.fillStyle = `rgba(${star.color.r}, ${star.color.g}, ${star.color.b}, ${star.currentAlpha})`;
         ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(
-          s.x - Math.cos(s.angle) * s.length,
-          s.y - Math.sin(s.angle) * s.length
-        );
-        ctx.stroke();
-        ctx.restore();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
 
-        s.x += Math.cos(s.angle) * s.speed;
-        s.y += Math.sin(s.angle) * s.speed;
-        s.alpha -= 0.012;
-
-        if (s.alpha <= 0 || s.x > width || s.y > height) {
-          shootingStars.splice(i, 1);
+        // Subtle diffraction glow for the brightest stars
+        if (star.radius > 1.2 && star.currentAlpha > 0.6) {
+          ctx.fillStyle = `rgba(${star.color.r}, ${star.color.g}, ${star.color.b}, ${star.currentAlpha * 0.12})`;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius * 3.5, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
@@ -126,12 +125,9 @@ export function Starfield() {
   }, []);
 
   return (
-    <>
-      <div className="pointer-events-none fixed inset-0 z-0 ambient-nebula" />
-      <canvas
-        ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-0 h-full w-full"
-      />
-    </>
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-90"
+    />
   );
 }
