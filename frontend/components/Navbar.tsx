@@ -11,40 +11,39 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/", label: "Главная" },
-    { href: "/map", label: "Карта неба" },
-    { href: "/encyclopedia", label: "Энциклопедия" },
-    { href: "/search", label: "Поиск" },
-    { href: "/quiz", label: "Викторина" },
-    { href: "/about", label: "О проекте" },
+    { href: "/", label: "Главная", icon: "✨" },
+    { href: "/map", label: "Карта неба", icon: "🗺️" },
+    { href: "/encyclopedia", label: "Энциклопедия", icon: "📖" },
+    { href: "/search", label: "Поиск", icon: "🔍" },
+    { href: "/quiz", label: "Викторина", icon: "🏆" },
+    { href: "/about", label: "О проекте", icon: "🪐" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-indigo-950/60 bg-black/70 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
         {/* Logo */}
-        <Link href="/" className="group flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 shadow-lg shadow-cyan-500/20 transition-transform group-hover:scale-105">
-            <svg
-              className="h-5 w-5 text-white animate-pulse"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z" />
-            </svg>
+        <Link href="/" className="group flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-amber-400 via-sky-400 to-indigo-500 shadow-md shadow-sky-500/15 transition-transform duration-300 group-hover:scale-105">
+            <span className="text-lg">⭐</span>
           </div>
           <div>
-            <span className="text-lg font-bold tracking-wider text-white">
-              СОЗВЕЗДИЯ
-            </span>
-            <span className="hidden text-[10px] tracking-widest text-cyan-400 uppercase sm:block">
-              Интерактивный атлас
+            <div className="flex items-center gap-1.5">
+              <span className="text-lg font-bold tracking-wide text-slate-100">
+                Созвездия
+              </span>
+              <span className="rounded-full bg-amber-400/15 border border-amber-400/30 px-1.5 py-0.2 text-[9px] font-semibold text-amber-300">
+                live
+              </span>
+            </div>
+            <span className="hidden text-[11px] font-medium tracking-wider text-slate-400 sm:block">
+              Атлас ночного неба
             </span>
           </div>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex bg-slate-900/60 p-1 rounded-2xl border border-slate-800/60 shadow-inner">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/"
@@ -54,44 +53,33 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
                   isActive
-                    ? "bg-indigo-900/50 text-cyan-300 shadow-inner shadow-cyan-500/10"
-                    : "text-zinc-300 hover:bg-zinc-800/50 hover:text-white"
+                    ? "bg-gradient-to-r from-sky-500/20 to-indigo-500/20 text-sky-300 border border-sky-400/30 shadow-sm"
+                    : "text-slate-300 hover:text-white hover:bg-slate-800/50"
                 }`}
               >
-                {link.label}
+                <span className="text-xs">{link.icon}</span>
+                <span>{link.label}</span>
               </Link>
             );
           })}
         </nav>
 
         {/* Profile and Favorites Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Link
             href="/profile"
-            className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-medium transition-all ${
+            className={`flex items-center gap-2 rounded-2xl border px-3.5 py-2 text-xs font-semibold transition-all shadow-sm ${
               pathname === "/profile"
-                ? "border-cyan-500/60 bg-cyan-950/40 text-cyan-200"
-                : "border-zinc-800 bg-zinc-900/60 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white"
+                ? "border-sky-400/50 bg-sky-950/40 text-sky-200"
+                : "border-slate-800 bg-slate-900/70 text-slate-300 hover:border-slate-700 hover:bg-slate-800 hover:text-white"
             }`}
           >
-            <svg
-              className="h-4 w-4 text-cyan-400"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
+            <span className="text-sm">👤</span>
             <span className="hidden sm:inline">Кабинет</span>
             {favorites.length > 0 && (
-              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-500 px-1 text-[11px] font-bold text-black">
+              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-1 text-[10px] font-bold text-slate-950 shadow-sm">
                 {favorites.length}
               </span>
             )}
@@ -100,38 +88,18 @@ export function Navbar() {
           {/* Mobile menu toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-800 text-zinc-300 hover:bg-zinc-800 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:bg-slate-800 md:hidden"
             aria-label="Меню"
           >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            {isMobileMenuOpen ? "✕" : "☰"}
           </button>
         </div>
       </div>
 
       {/* Mobile menu dropdown */}
       {isMobileMenuOpen && (
-        <div className="border-t border-zinc-800 bg-black/95 px-4 pt-2 pb-4 md:hidden">
-          <div className="flex flex-col gap-1">
+        <div className="border-t border-slate-800 bg-slate-950/95 px-4 pt-3 pb-5 md:hidden animate-in fade-in slide-in-from-top-2">
+          <div className="flex flex-col gap-1.5">
             {navLinks.map((link) => {
               const isActive =
                 link.href === "/"
@@ -142,13 +110,14 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium ${
+                  className={`flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-sm font-medium ${
                     isActive
-                      ? "bg-indigo-900/50 text-cyan-300"
-                      : "text-zinc-300 hover:bg-zinc-800"
+                      ? "bg-sky-950/60 text-sky-300 border border-sky-800/40"
+                      : "text-slate-300 hover:bg-slate-900"
                   }`}
                 >
-                  {link.label}
+                  <span>{link.icon}</span>
+                  <span>{link.label}</span>
                 </Link>
               );
             })}

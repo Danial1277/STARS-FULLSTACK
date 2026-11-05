@@ -23,24 +23,28 @@ export function Starfield() {
 
     window.addEventListener("resize", handleResize);
 
-    // Generate random twinkling stars
-    const starCount = Math.floor((width * height) / 4500);
+    // Warm, soft cosmic palette for stars
+    const starColors = [
+      "rgba(255, 255, 255, ",
+      "rgba(254, 240, 138, ", // warm soft yellow
+      "rgba(224, 231, 255, ", // soft lavender
+      "rgba(186, 230, 253, ", // soft sky blue
+      "rgba(254, 215, 170, ", // soft peach
+    ];
+
+    // Less dense, smoother stars (gentle on eyes)
+    const starCount = Math.floor((width * height) / 6000);
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 1.8 + 0.3,
-      alpha: Math.random(),
-      speed: Math.random() * 0.02 + 0.005,
+      size: Math.random() * 1.5 + 0.4,
+      alpha: Math.random() * 0.4 + 0.15,
+      speed: Math.random() * 0.008 + 0.003, // much slower twinkling
       direction: Math.random() > 0.5 ? 1 : -1,
-      color:
-        Math.random() > 0.8
-          ? "#cce6ff"
-          : Math.random() > 0.6
-          ? "#ffdfba"
-          : "#ffffff",
+      colorPrefix: starColors[Math.floor(Math.random() * starColors.length)],
     }));
 
-    // Occasional shooting stars
+    // Occasional gentle shooting star
     interface ShootingStar {
       x: number;
       y: number;
@@ -52,14 +56,14 @@ export function Starfield() {
     const shootingStars: ShootingStar[] = [];
 
     const spawnShootingStar = () => {
-      if (shootingStars.length < 2 && Math.random() < 0.015) {
+      if (shootingStars.length < 1 && Math.random() < 0.006) {
         shootingStars.push({
-          x: Math.random() * width,
-          y: Math.random() * (height / 2),
-          length: Math.random() * 80 + 40,
-          speed: Math.random() * 8 + 6,
-          angle: (Math.PI / 4) + (Math.random() * 0.2 - 0.1),
-          alpha: 1,
+          x: Math.random() * (width * 0.8),
+          y: Math.random() * (height * 0.4),
+          length: Math.random() * 60 + 35,
+          speed: Math.random() * 4 + 3,
+          angle: (Math.PI / 4) + (Math.random() * 0.15 - 0.07),
+          alpha: 0.65,
         });
       }
     };
@@ -67,31 +71,31 @@ export function Starfield() {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw starry ambient background
+      // Draw soft ambient stars
       stars.forEach((star) => {
         star.alpha += star.speed * star.direction;
-        if (star.alpha >= 1) {
-          star.alpha = 1;
+        if (star.alpha >= 0.75) {
+          star.alpha = 0.75;
           star.direction = -1;
-        } else if (star.alpha <= 0.1) {
-          star.alpha = 0.1;
+        } else if (star.alpha <= 0.12) {
+          star.alpha = 0.12;
           star.direction = 1;
         }
 
-        ctx.fillStyle = star.color;
-        ctx.globalAlpha = star.alpha;
+        ctx.fillStyle = `${star.colorPrefix}${star.alpha})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Spawn and draw shooting stars
+      // Spawn and draw gentle shooting stars
       spawnShootingStar();
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const s = shootingStars[i];
         ctx.save();
-        ctx.strokeStyle = "rgba(255, 255, 255, " + s.alpha + ")";
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = `rgba(186, 230, 253, ${s.alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(s.x, s.y);
         ctx.lineTo(
@@ -103,14 +107,13 @@ export function Starfield() {
 
         s.x += Math.cos(s.angle) * s.speed;
         s.y += Math.sin(s.angle) * s.speed;
-        s.alpha -= 0.02;
+        s.alpha -= 0.012;
 
         if (s.alpha <= 0 || s.x > width || s.y > height) {
           shootingStars.splice(i, 1);
         }
       }
 
-      ctx.globalAlpha = 1;
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -123,9 +126,12 @@ export function Starfield() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-80"
-    />
+    <>
+      <div className="pointer-events-none fixed inset-0 z-0 ambient-nebula" />
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none fixed inset-0 z-0 h-full w-full"
+      />
+    </>
   );
 }

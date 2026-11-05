@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { CONSTELLATIONS, Constellation } from "@/data/constellations";
+import { CONSTELLATIONS } from "@/data/constellations";
 
 export function ConstellationHeroAnimation() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,23 +13,21 @@ export function ConstellationHeroAnimation() {
 
   const current = CONSTELLATIONS[currentIndex];
 
-  // Pick random constellation on initial mount
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * CONSTELLATIONS.length);
     setCurrentIndex(randomIndex);
   }, []);
 
-  // Cycle constellations every 7 seconds if playing
   useEffect(() => {
     setAnimatedProgress(0);
     const animInterval = setInterval(() => {
-      setAnimatedProgress((prev) => Math.min(prev + 0.05, 1));
-    }, 40);
+      setAnimatedProgress((prev) => Math.min(prev + 0.04, 1));
+    }, 35);
 
     if (isPlaying) {
       timerRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % CONSTELLATIONS.length);
-      }, 7000);
+      }, 7500);
     }
 
     return () => {
@@ -47,21 +45,27 @@ export function ConstellationHeroAnimation() {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-5xl rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/40 via-black/60 to-purple-950/20 p-4 backdrop-blur-xl sm:p-8 shadow-2xl shadow-indigo-950/50">
+    <div className="relative mx-auto w-full max-w-5xl rounded-3xl border border-slate-700/50 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-indigo-950/40 p-5 sm:p-8 backdrop-blur-2xl shadow-2xl shadow-indigo-950/30">
       {/* Header of the Hero viewer */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4 border-b border-indigo-900/40 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-300 border border-cyan-500/30">
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping" />
-            Живая анимация неба
-          </span>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-300 border border-amber-400/30">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping" />
+              Живое созвездие сейчас
+            </span>
+            <span className="rounded-full bg-slate-800/80 px-2.5 py-1 text-[11px] text-slate-300 font-medium">
+              {current.hemisphere} небо
+            </span>
+          </div>
+
+          <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
             {current.name}
-            <span className="ml-2.5 text-base font-normal text-indigo-300">
+            <span className="text-sm font-normal text-indigo-300">
               ({current.latinName})
             </span>
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-zinc-400 max-w-lg">
+          <p className="mt-1 text-xs sm:text-sm text-slate-300 max-w-lg leading-relaxed">
             {current.shortDescription}
           </p>
         </div>
@@ -70,47 +74,43 @@ export function ConstellationHeroAnimation() {
         <div className="flex items-center gap-2">
           <button
             onClick={handlePrev}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-800/60 bg-indigo-950/60 text-zinc-300 hover:border-cyan-400 hover:text-white transition-colors"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/60 text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
             title="Предыдущее созвездие"
           >
             ←
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex h-9 items-center gap-1.5 rounded-xl border border-indigo-800/60 bg-indigo-950/60 px-3 text-xs font-medium text-zinc-300 hover:border-cyan-400 hover:text-white transition-colors"
+            className="flex h-10 items-center gap-1.5 rounded-2xl border border-slate-700/60 bg-slate-800/60 px-3.5 text-xs font-semibold text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
           >
-            {isPlaying ? "❚❚ Пауза" : "▶ Авто"}
+            {isPlaying ? "❚❚ Пауза" : "▶ Смотреть"}
           </button>
           <button
             onClick={handleNext}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-800/60 bg-indigo-950/60 text-zinc-300 hover:border-cyan-400 hover:text-white transition-colors"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700/60 bg-slate-800/60 text-slate-300 hover:border-sky-400 hover:text-white transition-all shadow-sm"
             title="Следующее созвездие"
           >
             →
           </button>
           <Link
             href={`/encyclopedia/constellation/${current.id}`}
-            className="flex h-9 items-center rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 text-xs font-semibold text-white shadow-md shadow-cyan-500/20 hover:brightness-110 transition-all"
+            className="flex h-10 items-center rounded-2xl bg-gradient-to-r from-sky-400 to-indigo-500 px-4 text-xs font-bold text-slate-950 shadow-md shadow-sky-500/20 hover:brightness-110 transition-all"
           >
-            Подробнее →
+            История и звёзды →
           </Link>
         </div>
       </div>
 
       {/* Interactive SVG Canvas */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-indigo-900/30 bg-black/60 shadow-inner">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-inner">
         {/* Soft cosmic glow in background */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(67,56,202,0.15),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.18),transparent_70%)]" />
 
         <svg
           viewBox="0 0 100 100"
           className="relative h-full w-full select-none"
           preserveAspectRatio="none"
         >
-          {/* Subtle grid lines */}
-          <line x1="0" y1="50" x2="100" y2="50" stroke="#312e81" strokeWidth="0.15" strokeDasharray="1 2" />
-          <line x1="50" y1="0" x2="50" y2="100" stroke="#312e81" strokeWidth="0.15" strokeDasharray="1 2" />
-
           {/* Constellation connecting lines with draw animation */}
           {current.lines.map(([startIndex, endIndex], lineIdx) => {
             const starA = current.stars[startIndex];
@@ -124,14 +124,14 @@ export function ConstellationHeroAnimation() {
                 y1={starA.y}
                 x2={starB.x}
                 y2={starB.y}
-                stroke="#60a5fa"
-                strokeWidth="0.4"
-                strokeOpacity={0.7 * animatedProgress}
+                stroke="#7dd3fc"
+                strokeWidth="0.55"
+                strokeOpacity={0.8 * animatedProgress}
                 strokeDasharray="100"
                 strokeDashoffset={100 * (1 - animatedProgress)}
                 style={{
-                  filter: "drop-shadow(0 0 2px rgba(96, 165, 250, 0.8))",
-                  transition: "stroke-dashoffset 0.8s ease-out",
+                  filter: "drop-shadow(0 0 4px rgba(125, 211, 252, 0.6))",
+                  transition: "stroke-dashoffset 0.7s ease-out",
                 }}
               />
             );
@@ -140,7 +140,7 @@ export function ConstellationHeroAnimation() {
           {/* Constellation Stars */}
           {current.stars.map((star, idx) => {
             const isHovered = hoveredStar === star.name;
-            const radius = Math.max(0.9, 2.2 - (star.brightness * 0.25));
+            const radius = Math.max(1.1, 2.4 - (star.brightness * 0.25));
 
             return (
               <g
@@ -153,9 +153,9 @@ export function ConstellationHeroAnimation() {
                 <circle
                   cx={star.x}
                   cy={star.y}
-                  r={radius * (isHovered ? 2.5 : 1.8)}
+                  r={radius * (isHovered ? 2.6 : 1.9)}
                   fill={star.color}
-                  opacity={isHovered ? 0.45 : 0.2}
+                  opacity={isHovered ? 0.5 : 0.22}
                   style={{ transition: "all 0.3s ease" }}
                 />
 
@@ -166,18 +166,19 @@ export function ConstellationHeroAnimation() {
                   r={radius}
                   fill={star.color}
                   style={{
-                    filter: `drop-shadow(0 0 ${radius * 1.5}px ${star.color})`,
+                    filter: `drop-shadow(0 0 ${radius * 2}px ${star.color})`,
                   }}
                 />
 
                 {/* Star label */}
                 <text
                   x={star.x}
-                  y={star.y - (radius + 1.6)}
-                  fill={isHovered ? "#38bdf8" : "#94a3b8"}
-                  fontSize="2.2"
+                  y={star.y - (radius + 2)}
+                  fill={isHovered ? "#38bdf8" : "#cbd5e1"}
+                  fontSize="2.4"
+                  fontWeight="600"
                   textAnchor="middle"
-                  className="pointer-events-none font-medium tracking-wide transition-colors"
+                  className="pointer-events-none select-none transition-colors"
                 >
                   {star.name.split(" ")[0]}
                 </text>
@@ -186,34 +187,32 @@ export function ConstellationHeroAnimation() {
           })}
         </svg>
 
-        {/* Tooltip on hover */}
+        {/* Floating tooltip on hover */}
         {hoveredStar && (
-          <div className="absolute bottom-3 left-3 rounded-lg border border-cyan-500/40 bg-zinc-950/90 px-3 py-1.5 text-xs text-white shadow-xl backdrop-blur-md">
-            <span className="font-semibold text-cyan-300">{hoveredStar}</span>
+          <div className="absolute bottom-4 left-4 rounded-xl border border-sky-400/40 bg-slate-900/90 px-3.5 py-2 text-xs text-white shadow-xl backdrop-blur-md">
+            <span className="font-bold text-sky-300">✦ {hoveredStar}</span>
+            <span className="block text-[10px] text-slate-300 mt-0.5">Кликните, чтобы изучить подробнее</span>
           </div>
         )}
 
         {/* Season & Hemisphere badge */}
-        <div className="absolute top-3 right-3 flex items-center gap-2">
-          <span className="rounded-lg bg-black/60 border border-zinc-800 px-2.5 py-1 text-[11px] text-zinc-300 backdrop-blur-md">
-            {current.hemisphere} полушарие
-          </span>
-          <span className="rounded-lg bg-black/60 border border-zinc-800 px-2.5 py-1 text-[11px] text-cyan-300 backdrop-blur-md">
-            {current.season}
+        <div className="absolute top-3.5 right-3.5 flex items-center gap-2">
+          <span className="rounded-xl bg-slate-900/80 border border-slate-700/60 px-3 py-1 text-xs text-slate-200 backdrop-blur-md shadow-sm">
+            🔭 Сезон: <strong className="text-amber-300">{current.season}</strong>
           </span>
         </div>
       </div>
 
       {/* Thumbnails to switch directly */}
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+      <div className="mt-5 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
         {CONSTELLATIONS.map((c, i) => (
           <button
             key={c.id}
             onClick={() => setCurrentIndex(i)}
-            className={`flex-shrink-0 rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`flex-shrink-0 rounded-2xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
               i === currentIndex
-                ? "border border-cyan-400 bg-cyan-950/50 text-white shadow-md shadow-cyan-500/20"
-                : "border border-zinc-800/80 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+                ? "border border-amber-400/70 bg-gradient-to-r from-amber-400/20 to-sky-400/20 text-white shadow-sm"
+                : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-slate-200"
             }`}
           >
             {c.name}

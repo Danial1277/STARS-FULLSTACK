@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { CONSTELLATIONS, Constellation, StarPoint } from "@/data/constellations";
 import { useUser } from "@/context/UserContext";
@@ -19,8 +19,6 @@ export default function SkyMapPage() {
   const [selectedConstellation, setSelectedConstellation] = useState<Constellation | null>(null);
   const [selectedStar, setSelectedStar] = useState<{ star: StarPoint; constellation: Constellation } | null>(null);
 
-  // Map constellations across a full celestial sky projection
-  // We distribute them across sky coordinates (0 to 1000 x 0 to 600)
   const skyOffsets: Record<string, { x: number; y: number; scale: number }> = {
     "ursa-major": { x: 220, y: 150, scale: 1.6 },
     "ursa-minor": { x: 420, y: 110, scale: 1.2 },
@@ -72,91 +70,94 @@ export default function SkyMapPage() {
   });
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden bg-black text-white">
+    <div className="relative flex flex-1 flex-col overflow-hidden bg-[#090d16] text-slate-100">
       {/* Top Map Control Toolbar */}
-      <div className="z-20 flex flex-wrap items-center justify-between gap-3 border-b border-indigo-900/40 bg-zinc-950/80 px-4 py-3 backdrop-blur-md">
-        <div>
-          <h1 className="text-lg font-bold text-white flex items-center gap-2">
-            <span className="text-cyan-400">✦</span> Интерактивная карта звёздного неба
-          </h1>
-          <p className="text-[11px] text-zinc-400">
-            Перемещайте карту мышью, масштабируйте колёсиком, кликайте на звёзды и созвездия
-          </p>
+      <div className="z-20 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 bg-slate-950/80 px-4 py-3 backdrop-blur-xl">
+        <div className="flex items-center gap-3">
+          <span className="text-xl">🗺️</span>
+          <div>
+            <h1 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              Интерактивная карта звёздного неба
+            </h1>
+            <p className="text-[11px] text-slate-400">
+              Перемещайте карту мышью, приближайте колёсиком, кликайте на звёзды
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Hemisphere Filter */}
-          <div className="flex rounded-lg border border-indigo-900/60 bg-zinc-900 p-0.5">
+          <div className="flex rounded-2xl border border-slate-700/60 bg-slate-900/80 p-1">
             <button
               onClick={() => setHemisphereFilter("all")}
-              className={`rounded px-2.5 py-1 ${
-                hemisphereFilter === "all" ? "bg-cyan-600 text-white" : "text-zinc-400 hover:text-white"
+              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
+                hemisphereFilter === "all" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
               Всё небо
             </button>
             <button
               onClick={() => setHemisphereFilter("north")}
-              className={`rounded px-2.5 py-1 ${
-                hemisphereFilter === "north" ? "bg-cyan-600 text-white" : "text-zinc-400 hover:text-white"
+              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
+                hemisphereFilter === "north" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
               Северное
             </button>
             <button
               onClick={() => setHemisphereFilter("south")}
-              className={`rounded px-2.5 py-1 ${
-                hemisphereFilter === "south" ? "bg-cyan-600 text-white" : "text-zinc-400 hover:text-white"
+              className={`rounded-xl px-3 py-1 font-semibold transition-all ${
+                hemisphereFilter === "south" ? "bg-sky-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
-              Южное / Экват.
+              Южное
             </button>
           </div>
 
           {/* Toggles */}
           <button
             onClick={() => setShowLines(!showLines)}
-            className={`rounded-lg border px-3 py-1.5 transition-colors ${
+            className={`rounded-2xl border px-3 py-1.5 font-semibold transition-colors ${
               showLines
-                ? "border-cyan-500/50 bg-cyan-950/40 text-cyan-300"
-                : "border-zinc-800 bg-zinc-900 text-zinc-400"
+                ? "border-sky-400/50 bg-sky-950/50 text-sky-200"
+                : "border-slate-800 bg-slate-900 text-slate-400"
             }`}
           >
             Линии: {showLines ? "Вкл" : "Выкл"}
           </button>
           <button
             onClick={() => setShowLabels(!showLabels)}
-            className={`rounded-lg border px-3 py-1.5 transition-colors ${
+            className={`rounded-2xl border px-3 py-1.5 font-semibold transition-colors ${
               showLabels
-                ? "border-cyan-500/50 bg-cyan-950/40 text-cyan-300"
-                : "border-zinc-800 bg-zinc-900 text-zinc-400"
+                ? "border-sky-400/50 bg-sky-950/50 text-sky-200"
+                : "border-slate-800 bg-slate-900 text-slate-400"
             }`}
           >
             Подписи: {showLabels ? "Вкл" : "Выкл"}
           </button>
 
           {/* Zoom buttons */}
-          <div className="flex items-center gap-1 rounded-lg border border-zinc-800 bg-zinc-900 px-2 py-1">
+          <div className="flex items-center gap-1 rounded-2xl border border-slate-800 bg-slate-900/80 px-2 py-1">
             <button
               onClick={() => setZoom((z) => Math.min(z * 1.2, 3.5))}
-              className="px-1.5 font-bold hover:text-cyan-400"
+              className="px-2 font-bold hover:text-sky-400 text-sm"
               title="Приблизить"
             >
               +
             </button>
-            <span className="text-[11px] text-zinc-400 w-10 text-center">
+            <span className="text-[11px] text-slate-300 w-10 text-center font-semibold">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.max(z * 0.8, 0.6))}
-              className="px-1.5 font-bold hover:text-cyan-400"
+              className="px-2 font-bold hover:text-sky-400 text-sm"
               title="Отдалить"
             >
               −
             </button>
             <button
               onClick={resetView}
-              className="ml-1 text-[11px] text-cyan-400 hover:underline"
+              className="ml-1 text-[11px] font-semibold text-amber-300 hover:underline px-1"
             >
               Сброс
             </button>
@@ -166,13 +167,12 @@ export default function SkyMapPage() {
 
       {/* Main Interactive Map Viewport */}
       <div
-        className="relative flex-1 cursor-grab active:cursor-grabbing overflow-hidden bg-radial-gradient select-none"
+        className="relative flex-1 cursor-grab active:cursor-grabbing overflow-hidden select-none bg-[radial-gradient(circle_at_50%_50%,#0f172a_0%,#090d16_100%)]"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onWheel={handleWheel}
       >
-        {/* Soft celestial grid and Milky Way band */}
         <div
           className="absolute inset-0 transition-transform duration-75 ease-out"
           style={{
@@ -185,18 +185,18 @@ export default function SkyMapPage() {
             className="w-[1000px] h-[650px] mx-auto overflow-visible"
           >
             {/* Celestial Grids */}
-            <circle cx="500" cy="325" r="300" fill="none" stroke="#1e1b4b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <circle cx="500" cy="325" r="200" fill="none" stroke="#1e1b4b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <circle cx="500" cy="325" r="100" fill="none" stroke="#1e1b4b" strokeWidth="0.8" strokeDasharray="3 4" />
-            <line x1="500" y1="20" x2="500" y2="630" stroke="#1e1b4b" strokeWidth="0.8" strokeDasharray="4 4" />
-            <line x1="100" y1="325" x2="900" y2="325" stroke="#1e1b4b" strokeWidth="0.8" strokeDasharray="4 4" />
+            <circle cx="500" cy="325" r="300" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
+            <circle cx="500" cy="325" r="200" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
+            <circle cx="500" cy="325" r="100" fill="none" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="3 4" />
+            <line x1="500" y1="20" x2="500" y2="630" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+            <line x1="100" y1="325" x2="900" y2="325" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
 
-            {/* Faint milky way path */}
+            {/* Soft Milky Way */}
             <path
               d="M100 100 Q 400 300, 800 550"
               fill="none"
-              stroke="rgba(99, 102, 241, 0.08)"
-              strokeWidth="90"
+              stroke="rgba(125, 211, 252, 0.05)"
+              strokeWidth="110"
               strokeLinecap="round"
             />
 
@@ -223,9 +223,9 @@ export default function SkyMapPage() {
                           y1={(sA.y - 50) * pos.scale}
                           x2={(sB.x - 50) * pos.scale}
                           y2={(sB.y - 50) * pos.scale}
-                          stroke={isSelected ? "#38bdf8" : "#4f46e5"}
+                          stroke={isSelected ? "#38bdf8" : "#64748b"}
                           strokeWidth={isSelected ? 1.4 : 0.8}
-                          strokeOpacity={isSelected ? 0.9 : 0.5}
+                          strokeOpacity={isSelected ? 0.95 : 0.45}
                         />
                       );
                     })}
@@ -236,7 +236,7 @@ export default function SkyMapPage() {
                       x="0"
                       y="-45"
                       textAnchor="middle"
-                      fill={isSelected ? "#38bdf8" : "#93c5fd"}
+                      fill={isSelected ? "#7dd3fc" : "#94a3b8"}
                       fontSize="9"
                       fontWeight="bold"
                       className="cursor-pointer hover:underline"
@@ -254,7 +254,7 @@ export default function SkyMapPage() {
                   {constellation.stars.map((star, sIdx) => {
                     const sx = (star.x - 50) * pos.scale;
                     const sy = (star.y - 50) * pos.scale;
-                    const r = Math.max(1.8, 4.0 - star.brightness * 0.45);
+                    const r = Math.max(2.0, 4.0 - star.brightness * 0.4);
 
                     return (
                       <g
@@ -282,7 +282,7 @@ export default function SkyMapPage() {
                           r={r}
                           fill={star.color}
                           style={{
-                            filter: `drop-shadow(0 0 ${r * 2}px ${star.color})`,
+                            filter: `drop-shadow(0 0 ${r * 1.5}px ${star.color})`,
                           }}
                         />
                         {/* Hover star label */}
@@ -292,9 +292,9 @@ export default function SkyMapPage() {
                           x={sx}
                           y={sy - r - 3}
                           textAnchor="middle"
-                          fill="#ffffff"
+                          fill="#f8fafc"
                           fontSize="6.5"
-                          className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none font-medium"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none font-semibold"
                         >
                           {star.name.split(" ")[0]}
                         </text>
@@ -309,16 +309,16 @@ export default function SkyMapPage() {
 
         {/* Selected Object Info Sidebar / Panel */}
         {selectedConstellation && (
-          <div className="absolute right-4 top-4 z-30 w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-cyan-500/40 bg-zinc-950/90 p-5 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-right duration-200">
+          <div className="absolute right-4 top-4 z-30 w-84 max-w-[calc(100vw-2rem)] rounded-3xl border border-sky-400/40 bg-slate-900/90 p-5 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-right duration-200">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider">
-                  {selectedStar ? "Карточка звезды" : "Карточка созвездия"}
+                <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                  {selectedStar ? "⭐ Звезда" : "✨ Созвездие"}
                 </span>
-                <h3 className="text-xl font-bold text-white">
+                <h3 className="text-xl font-bold text-white mt-0.5">
                   {selectedStar ? selectedStar.star.name : selectedConstellation.name}
                 </h3>
-                <p className="text-xs text-indigo-300">
+                <p className="text-xs text-indigo-300 font-mono">
                   {selectedConstellation.latinName} ({selectedConstellation.abbreviation})
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function SkyMapPage() {
                   setSelectedConstellation(null);
                   setSelectedStar(null);
                 }}
-                className="text-zinc-400 hover:text-white text-sm p-1"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:text-white"
               >
                 ✕
               </button>
@@ -335,54 +335,46 @@ export default function SkyMapPage() {
 
             {selectedStar ? (
               <div className="mt-4 space-y-2.5 text-xs">
-                <div className="rounded-lg bg-indigo-950/40 p-2.5 border border-indigo-900/40">
-                  <span className="text-zinc-400">Тип: </span>
-                  <span className="font-medium text-white">{selectedStar.star.type}</span>
+                <div className="rounded-2xl bg-slate-800/60 p-3 border border-slate-700/50">
+                  <span className="text-slate-400">Тип: </span>
+                  <span className="font-semibold text-white">{selectedStar.star.type}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="rounded-lg bg-zinc-900 p-2 border border-zinc-800">
-                    <span className="text-zinc-400 block text-[10px]">Яркость</span>
-                    <span className="font-semibold text-cyan-300">{selectedStar.star.brightness} mag</span>
+                  <div className="rounded-2xl bg-slate-800/60 p-2.5 border border-slate-700/50">
+                    <span className="text-slate-400 block text-[10px]">Блеск</span>
+                    <span className="font-bold text-amber-300">{selectedStar.star.brightness} mag</span>
                   </div>
-                  <div className="rounded-lg bg-zinc-900 p-2 border border-zinc-800">
-                    <span className="text-zinc-400 block text-[10px]">Созвездие</span>
-                    <span className="font-semibold text-white">{selectedConstellation.name}</span>
+                  <div className="rounded-2xl bg-slate-800/60 p-2.5 border border-slate-700/50">
+                    <span className="text-slate-400 block text-[10px]">Созвездие</span>
+                    <span className="font-bold text-white">{selectedConstellation.name}</span>
                   </div>
                 </div>
-                <p className="text-zinc-300 text-xs leading-relaxed pt-1">
-                  Звезда входит в состав созвездия {selectedConstellation.name}.
-                </p>
               </div>
             ) : (
               <div className="mt-4 space-y-3 text-xs">
-                <p className="text-zinc-300 leading-relaxed">
+                <p className="text-slate-200 leading-relaxed">
                   {selectedConstellation.shortDescription}
                 </p>
 
-                <div className="rounded-xl bg-indigo-950/30 p-3 border border-indigo-900/30">
-                  <h4 className="text-[11px] font-semibold text-cyan-300 mb-1">
-                    Мифология и история:
+                <div className="rounded-2xl bg-slate-800/60 p-3.5 border border-slate-700/50">
+                  <h4 className="text-[11px] font-bold text-amber-300 mb-1">
+                    Мифология и легенда:
                   </h4>
-                  <p className="text-[11px] text-zinc-300 line-clamp-3 leading-relaxed">
+                  <p className="text-[11px] text-slate-300 line-clamp-3 leading-relaxed">
                     {selectedConstellation.mythology}
                   </p>
-                </div>
-
-                <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
-                  <span>Полушарие: {selectedConstellation.hemisphere}</span>
-                  <span>Сезон: {selectedConstellation.season}</span>
                 </div>
               </div>
             )}
 
             {/* Action buttons */}
-            <div className="mt-5 flex items-center gap-2 pt-2 border-t border-zinc-850">
+            <div className="mt-5 flex items-center gap-2 pt-3 border-t border-slate-800">
               <button
                 onClick={() => toggleFavorite(selectedConstellation.id)}
-                className={`flex-1 rounded-xl border py-2 text-xs font-semibold transition-all ${
+                className={`flex-1 rounded-2xl border py-2.5 text-xs font-bold transition-all ${
                   isFavorite(selectedConstellation.id)
-                    ? "border-amber-500/60 bg-amber-950/40 text-amber-300"
-                    : "border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white"
+                    ? "border-amber-400 bg-amber-400/20 text-amber-200"
+                    : "border-slate-700 bg-slate-800 text-slate-200 hover:text-white"
                 }`}
               >
                 {isFavorite(selectedConstellation.id) ? "★ В избранном" : "☆ В избранное"}
@@ -390,9 +382,9 @@ export default function SkyMapPage() {
 
               <Link
                 href={`/encyclopedia/constellation/${selectedConstellation.id}`}
-                className="flex-1 rounded-xl bg-cyan-600 hover:bg-cyan-500 py-2 text-center text-xs font-semibold text-white shadow-md transition-colors"
+                className="flex-1 rounded-2xl bg-gradient-to-r from-sky-400 to-indigo-500 py-2.5 text-center text-xs font-bold text-slate-950 shadow-md transition-all hover:brightness-110"
               >
-                В энциклопедию →
+                Подробнее →
               </Link>
             </div>
           </div>
