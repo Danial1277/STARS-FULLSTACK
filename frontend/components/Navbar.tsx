@@ -14,6 +14,7 @@ export function Navbar() {
     { href: "/", label: "Главная" },
     { href: "/map", label: "Карта неба" },
     { href: "/encyclopedia", label: "Энциклопедия" },
+    { href: "/dashboard", label: "Дашборд" },
     { href: "/search", label: "Поиск" },
     { href: "/quiz", label: "Викторина" },
     { href: "/about", label: "О проекте" },
