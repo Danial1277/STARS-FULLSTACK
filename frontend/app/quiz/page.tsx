@@ -12,7 +12,7 @@ interface Question {
 }
 
 export default function QuizPage() {
-  const { saveQuizScore } = useUser();
+  const { saveQuizScore, role } = useUser();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -223,6 +223,18 @@ export default function QuizPage() {
 
           <div className="mt-3 inline-block rounded-md bg-slate-800 border border-slate-700 px-3 py-1 text-xs text-slate-300 font-mono">
             {score === 5 ? "Отличный уровень знания неба" : score >= 3 ? "Хороший уровень ориентации" : "Базовый уровень"}
+          </div>
+
+          <div className="mt-3 text-xs text-slate-400">
+            {role === "guest" ? (
+              <span className="text-amber-300/90">
+                В режиме гостя результаты не сохраняются. Для сохранения рекордов перейдите в кабинет и авторизуйтесь.
+              </span>
+            ) : (
+              <span className="text-emerald-400/90">
+                Результат успешно сохранён в вашем личном кабинете.
+              </span>
+            )}
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">

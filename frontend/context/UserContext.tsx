@@ -1,6 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { CONSTELLATIONS as defaultConstellations, STARS as defaultStars, Constellation, StarDetail } from "@/data/constellations";
+
+export type UserRole = "guest" | "user" | "admin";
 
 export interface Note {
   id: string;
@@ -17,12 +20,28 @@ export interface QuizScore {
   percentage: number;
 }
 
+export interface SystemUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  createdAt: string;
+}
+
 interface UserContextType {
-  favorites: string[]; // ids of constellations or stars
+  role: UserRole;
+  setRole: (role: UserRole) => void;
+  userName: string;
+  setUserName: (name: string) => void;
+  userEmail: string;
+  login: (name: string, email: string, role?: UserRole) => void;
+  logout: () => void;
+
+  favorites: string[];
   toggleFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
 
-  readArticles: string[]; // ids of constellations or stars
+  readArticles: string[];
   toggleRead: (id: string) => void;
   isRead: (id: string) => boolean;
 
@@ -33,22 +52,46 @@ interface UserContextType {
   quizScores: QuizScore[];
   saveQuizScore: (score: number, total: number) => void;
 
-  userName: string;
-  setUserName: (name: string) => void;
+  // Admin capabilities
+  customConstellations: Constellation[];
+  addCustomConstellation: (constellation: Constellation) => void;
+  deleteConstellation: (id: string) => void;
+  systemUsers: SystemUser[];
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
+  const [role, setRoleState] = useState<UserRole>("user");
+  const [userName, setUserNameState] = useState<string>("Даниал");
+  const [userEmail, setUserEmail] = useState<string>("danial@example.com");
+
   const [favorites, setFavorites] = useState<string[]>([]);
   const [readArticles, setReadArticles] = useState<string[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [quizScores, setQuizScores] = useState<QuizScore[]>([]);
-  const [userName, setUserName] = useState<string>("Звёздный странник");
+  const [customConstellations, setCustomConstellations] = useState<Constellation[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Mock database of users for Admin view
+  const [systemUsers] = useState<SystemUser[]>([
+    { id: "1", name: "Даниал (Вы)", email: "danial@example.com", role: "admin", createdAt: "01.11.2026" },
+    { id: "2", name: "Наргиз", email: "nargiz@example.com", role: "user", createdAt: "02.11.2026" },
+    { id: "3", name: "Сатыбалды", email: "satybaldy@example.com", role: "user", createdAt: "03.11.2026" },
+    { id: "4", name: "Гость #412", email: "guest@stars.net", role: "guest", createdAt: "05.11.2026" },
+  ]);
 
   useEffect(() => {
     try {
+      const savedRole = localStorage.getItem("stars_role") as UserRole | null;
+      if (savedRole) setRoleState(savedRole);
+
+      const savedName = localStorage.getItem("stars_user_name");
+      if (savedName) setUserNameState(savedName);
+
+      const savedEmail = localStorage.getItem("stars_user_email");
+      if (savedEmail) setUserEmail(savedEmail);
+
       const savedFavs = localStorage.getItem("stars_favorites");
       if (savedFavs) setFavorites(JSON.parse(savedFavs));
 
@@ -61,13 +104,34 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       const savedScores = localStorage.getItem("stars_quiz_scores");
       if (savedScores) setQuizScores(JSON.parse(savedScores));
 
-      const savedName = localStorage.getItem("stars_user_name");
-      if (savedName) setUserName(savedName);
+      const savedCustom = localStorage.getItem("stars_custom_constellations");
+      if (savedCustom) setCustomConstellations(JSON.parse(savedCustom));
     } catch {
-      // ignore localStorage errors in SSR / private mode
+      // ignore SSR storage issues
     }
     setIsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem("stars_role", role);
+    } catch {}
+  }, [role, isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem("stars_user_name", userName);
+    } catch {}
+  }, [userName, isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem("stars_user_email", userEmail);
+    } catch {}
+  }, [userEmail, isLoaded]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -100,11 +164,32 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isLoaded) return;
     try {
-      localStorage.setItem("stars_user_name", userName);
+      localStorage.setItem("stars_custom_constellations", JSON.stringify(customConstellations));
     } catch {}
-  }, [userName, isLoaded]);
+  }, [customConstellations, isLoaded]);
+
+  const setRole = (newRole: UserRole) => {
+    setRoleState(newRole);
+  };
+
+  const setUserName = (name: string) => {
+    setUserNameState(name);
+  };
+
+  const login = (name: string, email: string, newRole: UserRole = "user") => {
+    setUserNameState(name);
+    setUserEmail(email);
+    setRoleState(newRole);
+  };
+
+  const logout = () => {
+    setRoleState("guest");
+    setUserNameState("Гость");
+    setUserEmail("");
+  };
 
   const toggleFavorite = (id: string) => {
+    if (role === "guest") return;
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -113,6 +198,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const isFavorite = (id: string) => favorites.includes(id);
 
   const toggleRead = (id: string) => {
+    if (role === "guest") return;
     setReadArticles((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -121,6 +207,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const isRead = (id: string) => readArticles.includes(id);
 
   const addNote = (title: string, content: string, targetId?: string) => {
+    if (role === "guest") return;
     const newNote: Note = {
       id: Date.now().toString(),
       title,
@@ -136,6 +223,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   };
 
   const saveQuizScore = (score: number, total: number) => {
+    if (role === "guest") return; // Гость проходит викторину без сохранения результатов
     const newScore: QuizScore = {
       date: new Date().toLocaleDateString("ru-RU", {
         day: "numeric",
@@ -150,9 +238,26 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setQuizScores((prev) => [newScore, ...prev.slice(0, 9)]);
   };
 
+  const addCustomConstellation = (c: Constellation) => {
+    if (role !== "admin") return;
+    setCustomConstellations((prev) => [c, ...prev]);
+  };
+
+  const deleteConstellation = (id: string) => {
+    if (role !== "admin") return;
+    setCustomConstellations((prev) => prev.filter((c) => c.id !== id));
+  };
+
   return (
     <UserContext.Provider
       value={{
+        role,
+        setRole,
+        userName,
+        setUserName,
+        userEmail,
+        login,
+        logout,
         favorites,
         toggleFavorite,
         isFavorite,
@@ -164,8 +269,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         deleteNote,
         quizScores,
         saveQuizScore,
-        userName,
-        setUserName,
+        customConstellations,
+        addCustomConstellation,
+        deleteConstellation,
+        systemUsers,
       }}
     >
       {children}
